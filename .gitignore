@@ -1,0 +1,7 @@
+.vscode
+*.exe
+*.exe~
+*.test
+*.db
+assets_vfsdata.go
+__debug_bin
