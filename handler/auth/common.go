@@ -16,7 +16,6 @@ type Login struct {
 	TokenExpire string `json:"tokenExpire"`
 	UserID      int64  `json:"id"`
 	UserName    string `json:"account"`
-	UserIcon    string `json:"icon"`
 	Password    string `json:"-"`
 }
 

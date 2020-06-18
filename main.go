@@ -5,6 +5,7 @@ import (
 	"gowebapp/handler"
 	"gowebapp/middle"
 	"gowebapp/model"
+	"log"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +27,10 @@ func main() {
 	handler.Init(e)
 
 	// 初始化数据模型
-	model.Init()
+	err := model.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// 启动web服务
 	e.Run(*endpoint)

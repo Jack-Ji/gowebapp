@@ -1,6 +1,9 @@
 package model
 
 import (
+	"gowebapp/utils"
+	"log"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -9,7 +12,6 @@ type User struct {
 	Name     string `gorm:"unique_index;not null"`
 	Password *string
 	Salt     *string
-	Icon     *string
 }
 
 func (User) TableName() string {
@@ -17,7 +19,30 @@ func (User) TableName() string {
 }
 
 func (u User) Migrate(db *gorm.DB) error {
-	return db.AutoMigrate(&u).Error
+	err := db.AutoMigrate(&u).Error
+	if err != nil {
+		return err
+	}
+
+	// 初始化admin用户
+	var cnt int
+	err = DB.Model(u).Where("name = ?", "admin").Count(&cnt).Error
+	if err != nil {
+		return err
+	}
+	if cnt == 0 {
+		salted, salt := utils.GenSaltedPasswd("admin123456")
+		u.Name = "admin"
+		u.Password = &salted
+		u.Salt = &salt
+		err = DB.Create(&u).Error
+		if err != nil {
+			return err
+		}
+		log.Printf("已初始化admin账户, 密码为admin123456 ID为%d", u.ID)
+	}
+
+	return nil
 }
 
 func (u User) Drop(db *gorm.DB) error {
@@ -25,5 +50,9 @@ func (u User) Drop(db *gorm.DB) error {
 }
 
 func (u *User) GetByName(name string) error {
-	return DB.Where("name = ?", name).Take(u).Error
+	err := DB.Where("name = ?", name).Take(u).Error
+	if err != nil && gorm.IsRecordNotFoundError(err) {
+		err = ErrNotExist
+	}
+	return err
 }

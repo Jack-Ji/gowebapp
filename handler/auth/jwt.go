@@ -66,7 +66,6 @@ func Init() {
 				return nil, fmt.Errorf("用户或密码错误")
 			}
 			login.UserID = user.ID
-			login.UserIcon = *user.Icon
 
 			return &Token{
 				UserID:   user.ID,
