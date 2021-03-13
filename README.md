@@ -9,8 +9,8 @@ webapp starter project
 **QA**:
 1. How to embed assets?
 
-    Put your assets(html/js/css/images/mp3) into assets directory, and run `go run assets_generate.go`.<br>
-    The generated file `assets_vfsdata.go` should contains all the contents within the directory.
+    Put your assets(html/js/css/images/mp3) into directory `assets`, everthing will be loaded<br>
+    into `embed.FS` during compilation.
 
 2. How to add new data model?
 
