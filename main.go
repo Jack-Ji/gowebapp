@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
+	"gowebapp/assets"
 	"gowebapp/handler"
 	"gowebapp/middle"
 	"gowebapp/model"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,7 +23,7 @@ func main() {
 	e := gin.Default()
 	e.Use(middle.ServeCORS("Authorization"))
 	e.Use(middle.ServeAssets("/assets/"))
-	e.StaticFS("/assets/", Assets)
+	e.StaticFS("/assets/", http.FS(assets.FS))
 
 	// 初始化web接口
 	handler.Init(e)
