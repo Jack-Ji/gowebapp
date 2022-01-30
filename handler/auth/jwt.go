@@ -26,7 +26,7 @@ var (
 func Init() {
 	var err error
 	JwtWrapper, err = jwt.New(&jwt.GinJWTMiddleware{
-		Realm: "airsun auth",
+		Realm: "LM auth",
 
 		// 用于在会话上下文中获取Token
 		// handler可通过ctx.Get(IdentityKey)获取Token
