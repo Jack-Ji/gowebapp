@@ -1,10 +1,11 @@
 package model
 
 import (
+	"errors"
 	"gowebapp/utils"
 	"log"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type User struct {
@@ -14,19 +15,15 @@ type User struct {
 	Salt     *string
 }
 
-func (User) TableName() string {
-	return "gowebapp_user"
-}
-
 func (u User) Migrate(db *gorm.DB) error {
-	err := db.AutoMigrate(&u).Error
+	err := db.AutoMigrate(&u)
 	if err != nil {
 		return err
 	}
 
 	// 初始化admin用户
-	var cnt int
-	err = DB.Model(u).Where("name = ?", "admin").Count(&cnt).Error
+	var cnt int64
+	err = DB.Model(&u).Where("name = ?", "admin").Count(&cnt).Error
 	if err != nil {
 		return err
 	}
@@ -46,12 +43,12 @@ func (u User) Migrate(db *gorm.DB) error {
 }
 
 func (u User) Drop(db *gorm.DB) error {
-	return db.DropTable(&u).Error
+	return db.Migrator().DropTable(&u)
 }
 
 func (u *User) GetByName(name string) error {
 	err := DB.Where("name = ?", name).Take(u).Error
-	if err != nil && gorm.IsRecordNotFoundError(err) {
+	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
 		err = ErrNotExist
 	}
 	return err

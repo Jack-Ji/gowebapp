@@ -1,6 +1,6 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 // 数据库连接
 var DB *gorm.DB

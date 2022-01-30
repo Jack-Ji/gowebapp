@@ -1,18 +1,23 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 // 数据库表格初始化
-func Init() error {
-	var (
-		err    error
-		dbtype = "sqlite3"
-		dburl  = "app.db"
-	)
-	DB, err = gorm.Open(dbtype, dburl)
+func Init(dsn string) error {
+	var err error
+
+	cfg := gorm.Config{
+		SkipDefaultTransaction: true,
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix:   "gowebapp_",
+			SingularTable: true,
+		},
+	}
+	DB, err = gorm.Open(mysql.Open(dsn), &cfg)
 	if err != nil {
 		return err
 	}
