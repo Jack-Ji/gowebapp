@@ -4,6 +4,7 @@ webapp starter project
 **Feature**:
 1. Use gin as router;
 2. Use gorm to abstract db operation;
+3. Use jwt to manage session;
 3. Package assets into executable, easy to deploy;
 
 **QA**:
