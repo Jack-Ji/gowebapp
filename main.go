@@ -15,8 +15,9 @@ import (
 
 var (
 	endpoint        = flag.String("endpoint", "0.0.0.0:1888", "web监听地址")
-	maxReqPerSecond = flag.Int("maxreq", 1000, "每秒最多请求数")
+	maxReqPerSecond = flag.Int("maxreq", 100, "每秒最多请求数")
 	dsn             = flag.String("dsn", "unknown", "数据库链接信息")
+	debugDB         = flag.Bool("debugdb", false, "数据库操作详细日志")
 )
 
 func init() {
@@ -40,7 +41,7 @@ func main() {
 	if *dsn == "unknown" {
 		log.Fatal("不合法的数据库链接信息")
 	}
-	err := model.Init(*dsn)
+	err := model.Init(*dsn, *debugDB)
 	if err != nil {
 		log.Fatal(err)
 	}

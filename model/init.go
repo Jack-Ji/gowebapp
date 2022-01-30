@@ -7,7 +7,7 @@ import (
 )
 
 // 数据库表格初始化
-func Init(dsn string) error {
+func Init(dsn string, debug bool) error {
 	var err error
 
 	cfg := gorm.Config{
@@ -20,6 +20,9 @@ func Init(dsn string) error {
 	DB, err = gorm.Open(mysql.Open(dsn), &cfg)
 	if err != nil {
 		return err
+	}
+	if debug {
+		DB = DB.Debug()
 	}
 	for _, m := range dbTables {
 		if err := m.Migrate(DB); err != nil {

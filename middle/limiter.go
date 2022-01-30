@@ -9,10 +9,8 @@ import (
 )
 
 func RateLimiter(maxEventsPerSec int) gin.HandlerFunc {
+	limiter := rate.NewLimiter(rate.Limit(maxEventsPerSec), 10)
 	return func(c *gin.Context) {
-
-		limiter := rate.NewLimiter(rate.Limit(maxEventsPerSec), 10)
-
 		if limiter.Allow() {
 			c.Next()
 			return
